@@ -1,0 +1,38 @@
+name: TechDocs
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-techdocs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Docker Login
+        uses: docker/login-action@v1.14.1
+        with:
+          registry:  ${{ secrets.VCR_HOST }} 
+          username:  ${{ secrets.VCR_USERNAME }} 
+          password:  ${{ secrets.VCR_PASSWORD }} 
+          logout: "true"
+
+      - name: Setup pack cli
+        uses: andrioid/setup-pack@v1.0.1
+        with:
+          pack-version: 
+
+      - name: Generate techdocs
+        env:
+          TECHDOCS_CNB_BUILDER:  ${{ secrets.TECHDOCS_CNB_BUILDER }} 
+          AWS_S3_BUCKET:  ${{ secrets.TECHDOCS_AWS_S3_BUCKET }} 
+          AWS_ACCESS_KEY_ID:  ${{ secrets.TECHDOCS_AWS_ACCESS_KEY_ID }} 
+          AWS_SECRET_ACCESS_KEY:  ${{ secrets.TECHDOCS_AWS_SECRET_ACCESS_KEY }} 
+        run: |
+          builder="${{ secrets.TECHDOCS_CNB_BUILDER }}"
+          tag="${{ github.repository }}-techdocs:latest"
+          pack config trusted-builders add $builder
+          
+          pack build $tag -e AWS_S3_BUCKET=$AWS_S3_BUCKET -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --path "." --builder $builder

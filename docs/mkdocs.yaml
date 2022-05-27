@@ -1,0 +1,16 @@
+site_name: reda-test
+site_description: reda test
+site_author: redahmeid
+repo_url: https://github.com/redahmeid/reda-test
+edit_uri: 'edit/main/docs'
+copyright: "© Vonage"
+docs_dir: "documentation"
+
+nav:
+  - Introduction: index.md
+
+markdown_extensions:
+  - pymdownx.snippets:
+      
+plugins:
+  - techdocs-core

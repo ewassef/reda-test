@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: reda-test
+  description: reda test
+  annotations:
+    github.com/project-slug: redahmeid/reda-test
+    backstage.io/techdocs-ref: dir:../docs/
+spec:
+  type: service
+  lifecycle: experimental
+  owner: redahmeid
